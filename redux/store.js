@@ -7,9 +7,13 @@ import User from './reducers/User';
 import {logger} from 'redux-logger';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistReducer, persistStore} from 'redux-persist';
+import Categories from './reducers/Categories';
+import Donations from './reducers/Donations';
 // import persistStore from 'redux-persist/es/persistStore';
 const rootReducer = combineReducers({
   user: User,
+  categories: Categories,
+  donations: Donations,
 });
 const configuration = {
   key: 'root',

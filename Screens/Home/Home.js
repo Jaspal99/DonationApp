@@ -1,55 +1,155 @@
-import {Pressable, SafeAreaView, Text, View} from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Pressable,
+  FlatList,
+} from 'react-native';
 import globalStyle from '../../Assets/Styles/GlobalStyles';
-import Header from '../../Components/Header/Header';
-import Button from '../../Components/Button/Button';
-import Tab from '../../Components/Tab/Tab';
-import Badge from '../../Components/Badge/Badge';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faSearch} from '@fortawesome/free-solid-svg-icons';
-import Search from '../../Components/Search/Search';
-import SingleDonationItem from '../../Components/SingleDonationItem/SingleDonationItem';
-import {horizontalScale} from '../../Assets/Styles/scalling';
 import {useDispatch, useSelector} from 'react-redux';
-import {updateFirstName} from '../../redux/reducers/User';
+import style from './style';
+import Header from '../../Components/Header/Header';
+import Search from '../../Components/Search/Search';
+import {resetToInitialState} from '../../redux/reducers/User';
+import {updateSelectedCategoryId} from '../../redux/reducers/Categories';
+import Tab from '../../Components/Tab/Tab';
+import {useEffect, useState} from 'react';
+import SingleDonationItem from '../../Components/SingleDonationItem/SingleDonationItem';
+import {updateSelectedDonationId} from '../../redux/reducers/Donations';
+import {Routes} from '../../Navigation/Routes';
 
-export default function Home() {
+export default function Home({navigation}) {
   const user = useSelector(state => state.user);
-  // console.log(user);
+  const categories = useSelector(state => state.categories);
+  const donations = useSelector(state => state.donations);
+
   const dispatch = useDispatch();
+
+  const [donationItems, setDonationItems] = useState([]);
+  const [categoryPage, setCategoryPage] = useState(1);
+  const [categoryList, setCategoryList] = useState([]);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(false);
+  const categoryPageSize = 4;
+  // console.log('this is our current donations state', donationItems);
+  useEffect(() => {
+    const items = donations.items.filter(value =>
+      value.categoryIds.includes(categories.selectedCategoryId),
+    );
+    setDonationItems(items);
+  }, [categories.selectedCategoryId]);
+
+  useEffect(() => {
+    setIsLoadingCategories(true);
+    setCategoryList(
+      pagination(categories.categories, categoryPage, categoryPageSize),
+    );
+    setCategoryPage(prev => prev + 1);
+    setIsLoadingCategories(false);
+  }, []);
+
+  const pagination = (items, pageNumber, pageSize) => {
+    const startIndex = (pageNumber - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    if (startIndex >= items.length) {
+      return [];
+    }
+    return items.slice(startIndex, endIndex);
+  };
   return (
     <SafeAreaView style={[globalStyle.backgroundWhite, globalStyle.flex]}>
-      {/* <Search
-        onSearch={value => {
-          console.log(value);
-        }}
-      />
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          paddingHorizontal: horizontalScale(24),
-        }}>
-        <SingleDonationItem
-          uri={
-            'https://img.pixers.pics/pho_wat(s3:700/FO/44/24/64/31/700_FO44246431_ab024cd8251bff09ce9ae6ecd05ec4a8.jpg,525,700,cms:2018/10/5bd1b6b8d04b8_220x50-watermark.png,over,305,650,jpg)/stickers-cactus-cartoon-illustration.jpg.jpg'
-          }
-          badgeTitle={'Environment'}
-          donationTitle={'Tree Cactus'}
-          price={44}
-        />
-        <SingleDonationItem
-          uri={
-            'https://img.pixers.pics/pho_wat(s3:700/FO/44/24/64/31/700_FO44246431_ab024cd8251bff09ce9ae6ecd05ec4a8.jpg,525,700,cms:2018/10/5bd1b6b8d04b8_220x50-watermark.png,over,305,650,jpg)/stickers-cactus-cartoon-illustration.jpg.jpg'
-          }
-          badgeTitle={'Environment'}
-          donationTitle={'Tree Cactus'}
-          price={44}
-        />
-      </View> */}
-      <Header title={user.firstName + ' ' + user.lastName} />
-      <Pressable onPress={() => dispatch(updateFirstName({firstName: 'J'}))}>
-        <Text>Click to update</Text>
-      </Pressable>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={style.header}>
+          <View>
+            <Text style={style.headerIntroText}>Hello, </Text>
+            <View style={style.username}>
+              <Header
+                title={user.firstName + ' ' + user.lastName[0] + '. 👋'}
+              />
+            </View>
+          </View>
+          <Image
+            source={{uri: user.profileImage}}
+            style={style.profileImage}
+            resizeMode={'contain'}
+          />
+        </View>
+        <View style={style.searchBox}>
+          <Search />
+        </View>
+        <Pressable style={style.highlightedImageContainer}>
+          <Image
+            style={style.highlightedImage}
+            source={require('../../Assets/Images/highlighted_image.png')}
+            resizeMode={'contain'}
+          />
+        </Pressable>
+        <View style={style.categoryHeader}>
+          <Header title={'Select Category'} type={2} />
+        </View>
+        <View style={style.categories}>
+          <FlatList
+            onEndReachedThreshold={0.5}
+            onEndReached={() => {
+              if (isLoadingCategories) {
+                return;
+              }
+              console.log(
+                'User has reached the end and we are getting more data for page number ',
+                categoryPage,
+              );
+              setIsLoadingCategories(true);
+              let newData = pagination(
+                categories.categories,
+                categoryPage,
+                categoryPageSize,
+              );
+              if (newData.length > 0) {
+                setCategoryList(prevState => [...prevState, ...newData]);
+                setCategoryPage(prevState => prevState + 1);
+              }
+              setIsLoadingCategories(false);
+            }}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={categoryList}
+            renderItem={({item}) => (
+              <View style={style.categoryItem} key={item.categoryId}>
+                <Tab
+                  tabId={item.categoryId}
+                  onPress={value => dispatch(updateSelectedCategoryId(value))}
+                  title={item.name}
+                  isInactive={item.categoryId !== categories.selectedCategoryId}
+                />
+              </View>
+            )}
+          />
+        </View>
+        {donationItems.length > 0 && (
+          <View style={style.donationItemsContainer}>
+            {donationItems.map(value => (
+              <View key={value.donationItemId} style={style.singleDonationItem}>
+                <SingleDonationItem
+                  onPress={selectedDonationId => {
+                    dispatch(updateSelectedDonationId(selectedDonationId));
+                    navigation.navigate(Routes.SingleDonationItem);
+                  }}
+                  donationItemId={value.donationItemId}
+                  uri={value.image}
+                  donationTitle={value.name}
+                  badgeTitle={
+                    categories.categories.filter(
+                      val => val.categoryId === categories.selectedCategoryId,
+                    )[0].name
+                  }
+                  price={parseFloat(value.price)}
+                />
+              </View>
+            ))}
+          </View>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }

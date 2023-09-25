@@ -24,6 +24,7 @@ export default function Search(props) {
         icon={faSearch}
       />
       <TextInput
+        placeholder={props.placeholder}
         value={search}
         onChangeText={value => {
           handleSearch(value);
@@ -36,7 +37,9 @@ export default function Search(props) {
 }
 Search.defaultProps = {
   onSearch: () => {},
+  placeholder: 'Search',
 };
 Search.propTypes = {
   onSearch: PropTypes.func,
+  placeholder: PropTypes.string,
 };
