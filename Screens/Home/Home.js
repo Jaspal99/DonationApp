@@ -1,4 +1,4 @@
-import {SafeAreaView, Text, View} from 'react-native';
+import {Pressable, SafeAreaView, Text, View} from 'react-native';
 import globalStyle from '../../Assets/Styles/GlobalStyles';
 import Header from '../../Components/Header/Header';
 import Button from '../../Components/Button/Button';
@@ -9,11 +9,16 @@ import {faSearch} from '@fortawesome/free-solid-svg-icons';
 import Search from '../../Components/Search/Search';
 import SingleDonationItem from '../../Components/SingleDonationItem/SingleDonationItem';
 import {horizontalScale} from '../../Assets/Styles/scalling';
+import {useDispatch, useSelector} from 'react-redux';
+import {updateFirstName} from '../../redux/reducers/User';
 
 export default function Home() {
+  const user = useSelector(state => state.user);
+  // console.log(user);
+  const dispatch = useDispatch();
   return (
     <SafeAreaView style={[globalStyle.backgroundWhite, globalStyle.flex]}>
-      <Search
+      {/* <Search
         onSearch={value => {
           console.log(value);
         }}
@@ -40,7 +45,11 @@ export default function Home() {
           donationTitle={'Tree Cactus'}
           price={44}
         />
-      </View>
+      </View> */}
+      <Header title={user.firstName + ' ' + user.lastName} />
+      <Pressable onPress={() => dispatch(updateFirstName({firstName: 'J'}))}>
+        <Text>Click to update</Text>
+      </Pressable>
     </SafeAreaView>
   );
 }
