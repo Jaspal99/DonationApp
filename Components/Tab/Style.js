@@ -4,6 +4,7 @@ import {
   scaleFontSize,
   verticalScale,
 } from '../../Assets/Styles/scalling';
+import {getFontFamily} from '../../Assets/Fonts/helper';
 
 const style = StyleSheet.create({
   tab: {
@@ -16,9 +17,10 @@ const style = StyleSheet.create({
     backgroundColor: '#F3F5F9',
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: getFontFamily('Inter', '500'),
+    // fontFamily: 'Inter',
     fontSize: scaleFontSize(14),
-    fontWeight: '500',
+    // fontWeight: '500',
     lineHeight: scaleFontSize(17),
     color: '#FFFFFF',
     textAlign: 'center',

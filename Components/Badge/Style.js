@@ -4,6 +4,7 @@ import {
   scaleFontSize,
   verticalScale,
 } from '../../Assets/Styles/scalling';
+import {getFontFamily} from '../../Assets/Fonts/helper';
 
 const style = StyleSheet.create({
   badge: {
@@ -13,9 +14,10 @@ const style = StyleSheet.create({
     borderRadius: horizontalScale(50),
   },
   title: {
-    fontFamily: 'Inter',
+    // fontFamily: 'Inter',
+    fontFamily: getFontFamily('Inter', '600'),
     fontSize: scaleFontSize(10),
-    fontWeight: '600',
+    // fontWeight: '600',
     lineHeight: scaleFontSize(12),
     color: '#FFFFFF',
     textAlign: 'center',

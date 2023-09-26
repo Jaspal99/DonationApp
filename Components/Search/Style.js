@@ -4,13 +4,15 @@ import {
   scaleFontSize,
   verticalScale,
 } from '../../Assets/Styles/scalling';
+import {getFontFamily} from '../../Assets/Fonts/helper';
 
 const style = StyleSheet.create({
   searchInput: {
     flex: 1,
     marginLeft: horizontalScale(6),
     height: '100%',
-    fontFamily: 'Inter',
+    // fontFamily: 'Inter',
+    fontFamily: getFontFamily('Inter', '400'),
     fontSize: scaleFontSize(14),
     lineHeight: scaleFontSize(14),
     color: '#686C7A',

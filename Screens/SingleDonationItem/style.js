@@ -4,6 +4,7 @@ import {
   scaleFontSize,
   verticalScale,
 } from '../../Assets/Styles/scalling';
+import {getFontFamily} from '../../Assets/Fonts/helper';
 
 const style = StyleSheet.create({
   container: {
@@ -23,8 +24,9 @@ const style = StyleSheet.create({
   description: {
     marginTop: verticalScale(7),
     marginHorizontal: horizontalScale(7),
-    fontFamily: 'Inter',
-    fontWeight: '400',
+    fontFamily: getFontFamily('Inter', '400'),
+    // fontFamily: 'Inter',
+    // fontWeight: '400',
     fontSize: scaleFontSize(14),
     marginBottom: verticalScale(10),
   },

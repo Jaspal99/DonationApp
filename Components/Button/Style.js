@@ -4,6 +4,7 @@ import {
   scaleFontSize,
   verticalScale,
 } from '../../Assets/Styles/scalling';
+import {getFontFamily} from '../../Assets/Fonts/helper';
 
 const style = StyleSheet.create({
   button: {
@@ -16,9 +17,10 @@ const style = StyleSheet.create({
     opacity: 0.5,
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: getFontFamily('Inter', '500'),
+    // fontFamily: 'Inter',
     fontSize: scaleFontSize(16),
-    fontWeight: '500',
+    // fontWeight: '500',
     lineHeight: scaleFontSize(19),
     color: '#FFFFFF',
     textAlign: 'center',

@@ -4,6 +4,7 @@ import {
   scaleFontSize,
   verticalScale,
 } from '../../Assets/Styles/scalling';
+import {getFontFamily} from '../../Assets/Fonts/helper';
 
 const style = StyleSheet.create({
   header: {
@@ -14,10 +15,11 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headerIntroText: {
-    fontFamily: 'Inter',
+    // fontFamily: 'Inter',
+    // fontWeight: '400',
+    fontFamily: getFontFamily('Inter', '400'),
     fontSize: scaleFontSize(16),
     lineHeight: scaleFontSize(19),
-    fontWeight: '400',
     color: '#636776',
   },
   username: {
