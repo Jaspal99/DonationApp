@@ -1,3 +1,4 @@
+import Login from '../Screens/Login/Login';
 import SingleDonationItem from '../Screens/SingleDonationItem/SingleDonationItem';
 import {Routes} from './Routes';
 
@@ -8,7 +9,10 @@ const Stack = createStackNavigator();
 
 const MainNavigation = () => {
   return (
-    <Stack.Navigator screenOptions={{header: () => null, headerShown: false}}>
+    <Stack.Navigator
+      initialRouteName={Routes.Login}
+      screenOptions={{header: () => null, headerShown: false}}>
+      <Stack.Screen name={Routes.Login} component={Login} />
       <Stack.Screen name={Routes.Home} component={Home} />
       <Stack.Screen
         name={Routes.SingleDonationItem}
