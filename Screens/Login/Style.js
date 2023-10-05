@@ -5,6 +5,11 @@ import {horizontalScale} from '../../Assets/Styles/scalling';
 const style = StyleSheet.create({
   container: {
     marginHorizontal: horizontalScale(24),
+    flex: 1,
+    justifyContent: 'center',
+  },
+  registrationButton: {
+    alignItems: 'center',
   },
 });
 
